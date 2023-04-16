@@ -1,0 +1,12 @@
+Math
+180
+Philosophy
+90
+Biology
+100
+Foreign_Language
+120
+Theory_of_Chances
+150
+Physics
+180

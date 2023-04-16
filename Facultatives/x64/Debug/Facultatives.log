@@ -1,0 +1,5 @@
+﻿  MyForm.cpp
+D:\VS Projects\Facultatives\MyForm.h(158,2): error C2065: wl: необъявленный идентификатор
+D:\VS Projects\Facultatives\MyForm.h(158,25): error C2039: "ToInt32": не является членом "System::String".
+D:\VS Projects\Facultatives\MyForm.h(159,22): error C2039: "ToInt32": не является членом "System::String".
+D:\VS Projects\Facultatives\MyForm.h(159,32): error C2065: wl: необъявленный идентификатор
