@@ -1,60 +1,52 @@
 #include "MyForm.h"
-#include <iostream>
-#include <stack>
-#include <fstream>
 
-using namespace std;
 using namespace System;
 using namespace System::Windows::Forms;
-
-stack <int> ans;
-ifstream file;
-string list[100];
-int wl, max_capacity, counter, i = 0, n = 0;
+using namespace System::Data::OleDb;
 
 [STAThreadAttribute]
 
-//void findAns(int wl, int max_capacity, int weights[], int** arr) {
-//	if (arr[wl][max_capacity] == 0) return;
-//	if (arr[wl - 1][max_capacity] == arr[wl][max_capacity]) findAns(wl - 1, max_capacity, weights, arr);
-//	else {
-//		ans.push(wl);
-//		findAns(wl - 1, max_capacity - weights[wl - 1], weights, arr);
-//	}
-//}
-//
-//int one_item(int wl, int max_capacity, int weights[], int values[]) {
-//	int** arr; // Матрица, где строки - вес, столбцы - вместимость рюкзака. Ячейки заполняются макс. стоимостями
-//	arr = new int* [wl + 1];
-//	for (int i = 0; i < wl + 1; i++)
-//		arr[i] = new int[max_capacity + 1];
-//	for (int i = 0; i <= wl; i++) {
-//		for (int j = 0; j <= max_capacity; j++) {
-//			if (i == 0 || j == 0) arr[i][j] = 0; // Нулевые строка и столбец заполняются нулями
-//			else {
-//				if (weights[i - 1] > j) arr[i][j] = arr[i - 1][j]; // если вес предмета больше текущей вместимости - вписываем предыдущее значение в столбце
-//				else arr[i][j] = max(arr[i - 1][j], values[i - 1] + arr[i - 1][j - weights[i - 1]]); // Иначе, записываем значение по формуле: максимум из предыдущей ячейки в столбце и суммы стоимости пред. предмета с макс. стоимостью в предыдущей строке, которая влазит в остаток места в рюкзаке
-//			}
-//		}
-//	}
-//	int answer = arr[wl][max_capacity];
-//	findAns(wl, max_capacity, weights, arr);
-//	for (int i = 0; i < wl + 1; i++)
-//		delete[]arr[i];
-//	delete[]arr;
-//	return answer; // В последней ячейке максимальная стоимость
-//}
-
 int main() {
-	//file.open("facs.txt"); // Открываем файл
-	//while (!file.eof()) { // Пока не конец
-	//	file >> i; // Переходим на новую строку
-	//	n++; // Увеличиваем размер векторов
-	//} // Теперь в n записано кол-во строк в файле
-	//file.close(); // Закроем файл
-
 	Application::SetCompatibleTextRenderingDefault(false);
 	Application::EnableVisualStyles();
 	Facultatives::MyForm form;
 	Application::Run(% form);
+}
+
+System::Void Facultatives::MyForm::btn_exit_Click(System::Object^ sender, System::EventArgs^ e) {
+	Application::Exit();
+}
+
+System::Void Facultatives::MyForm::btn_result_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Вывод выборки на экран
+	for (int i = 0; i < wl; i++) label4->Text += Convert::ToString(weights[i]);
+	return System::Void();
+}
+
+System::Void Facultatives::MyForm::btn_add_db_Click(System::Object^ sender, System::EventArgs^ e) {
+	database->Rows->Clear();
+	// Подключение базы данных
+	String^ connectionString = "provider = Microsoft.ACE.OLEDB.12.0; Data Source=Facultatives.mdb";
+	OleDbConnection^ dbConnection = gcnew OleDbConnection(connectionString);
+
+	dbConnection->Open();
+	String^ query = "SELECT * FROM [Facultatives]";
+	OleDbCommand^ dbComand = gcnew OleDbCommand(query, dbConnection);
+	OleDbDataReader^ dbReader = dbComand->ExecuteReader();
+
+	if (dbReader->HasRows == false) {
+		MessageBox::Show("Ошибка считывания данных!", "Ошибка!");
+	}
+	else {
+		while (dbReader->Read()) {
+			database->Rows->Add(dbReader["id"], dbReader["name"], dbReader["weight"], dbReader["price"]);
+			wl++;
+		}
+		for(int i = 0; i < wl; i++) {
+			weights[i] = Convert::ToInt32(database->Rows[2]->Cells[i]->Value->ToString());
+		}
+	}
+	dbReader->Close();
+	dbConnection->Close();
+	return System::Void();
 }
