@@ -1,5 +1,0 @@
-D:\VS Projects\Facultatives\x64\Debug\Facultatives.exe
-D:\VS Projects\Facultatives\x64\Debug\Facultatives.vcxproj.AssemblyReference.cache
-D:\VS Projects\Facultatives\x64\Debug\Facultatives.vcxproj.SuggestedBindingRedirects.cache
-D:\VS Projects\Facultatives\x64\Debug\Facultatives.MyForm.resources
-D:\VS Projects\Facultatives\x64\Debug\Facultatives.vcxproj.GenerateResource.cache
